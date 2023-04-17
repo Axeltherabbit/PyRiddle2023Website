@@ -1,33 +1,64 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Chessboard } from "react-chessboard";
+
+
+// Icons taken from https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces
+import CommonerIcon from "./assets/90px-Commoner_Transparent.svg.png"
+import UnicornIcon from "./assets/Chess_Ult45.svg.png"
+import MannIcon from "./assets/Chess_Mlt45.svg.png"
+
+
+
 import './App.css'
+import { Square } from 'react-chessboard/dist/chessboard/types';
+
+interface customPieceArgs {
+  squareWidth: number,
+  isDragging: boolean
+}
+
+function customPiece(icon: string, tag: string) {
+  return ({ squareWidth, isDragging }: customPieceArgs) => (
+    <img
+      style={{
+        width: isDragging ? squareWidth * 1.75 : squareWidth,
+        height: isDragging ? squareWidth * 1.75 : squareWidth
+      }}
+      src={icon}
+      alt={tag}
+    />)
+}
+var pieces = {
+  wK: customPiece(CommonerIcon, "Commoner"),
+  wR: customPiece(MannIcon, "Mann"),
+  wN: customPiece(UnicornIcon, "Unicorn"),
+}
+
+
+function clearArrows(setArrows: Function) {
+  setArrows([]);
+  console.log("clearing arrows");
+}
+
+
+function drawArrows(setArrows: Function) {
+  setArrows([['a3', 'a5'], ['g1', 'f3']]);
+  console.log("drawing arrows");
+}
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [arrows, setArrows] = useState<Square[][]>([]);
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1 class="text-primary">PyRiddle 2023</h1>
+      <Chessboard
+        position="8/8/8/3K4/8/8/8/8"
+        customPieces={pieces}
+        onPieceDragBegin={() => clearArrows(setArrows)}
+        onPieceDragEnd={() => drawArrows(setArrows)}
+        customArrows={arrows} />
+      <p>Drag and drop the piece around to see the squares coverage</p>
     </div>
   )
 }
