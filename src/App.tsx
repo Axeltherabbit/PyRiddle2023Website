@@ -10,6 +10,7 @@ import {MovementsButtons} from './MovementsButtons';
 const boardSize = 200
 const files = "abcdefgh"
 const ranks = "12345678"
+
 function NumericToCoordinates(x: number, y: number){
   if (x > 7 || x < 0 || y > 7 || y < 0) return null;
   return files[x]+String(y+1)
@@ -68,10 +69,8 @@ function OnPositionChange(currentPosition : Map<string, string>, setArrows: Func
 
   return true;
 }
-function refreshArrows(setArrowsMovements : Function, movements: (number | null)[][], piecePosition1: string, setArrowsCaptures: Function, captures: (number | null)[][], piecePosition2: string){
-  drawArrows(setArrowsMovements, movements, piecePosition1);
-  drawArrows(setArrowsCaptures, captures, piecePosition2);
-}
+
+
 function App() {
   const [arrowsMovements, setArrowsMovements] = useState<Square[][]>([]);
   const [arrowsCaptures, setArrowsCaptures] = useState<Square[][]>([]);
@@ -90,8 +89,11 @@ function App() {
           <h3 className="text-primary">Movements</h3>
           <MovementsButtons movements={movements} setMovements={setMovements} 
             captures={captures} setCaptures={setCaptures} 
-            refreshArrows={()=> refreshArrows(setArrowsMovements, movements, piecePosition1,setArrowsCaptures, captures, piecePosition2)}/>
+            refreshArrowsMovements={() => drawArrows(setArrowsMovements, movements, piecePosition1)}
+            refreshArrowsCaptures={() => drawArrows(setArrowsCaptures, captures, piecePosition2)}
+            />
         </div>
+
 
         <div className='col'>
           <div className='col'>
