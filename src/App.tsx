@@ -25,6 +25,9 @@ function drawArrows(setArrows: Function) {
 
 function App() {
   const [arrows, setArrows] = useState<Square[][]>([]);
+  const [movements, setMovements] = useState<(number | null)[][]>([[0,0,0],[0,null,0],[0,0,0]]);
+  const [captures, setCaptures] = useState<(number | null)[][]>([[0,0,0],[0,null,0],[0,0,0]]);
+
   return (
     <div className="App container">
       <h1 className="text-primary">PyRiddle 2023</h1>
@@ -33,7 +36,7 @@ function App() {
       <div className='row'>
         <div className='col'>
           <h3 className="text-primary">Movements</h3>
-                    {MovementsButtons()}
+          <MovementsButtons movements={movements} setMovements={setMovements} captures={captures} setCaptures={setCaptures}/>
         </div>
 
         <div className='col'>
