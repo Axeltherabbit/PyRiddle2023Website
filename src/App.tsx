@@ -2,24 +2,12 @@ import { useState } from 'react'
 import { Chessboard } from "react-chessboard";
 
 import './App.css';
-import { Square } from 'react-chessboard/dist/chessboard/types';
+import { BoardPosition, Square } from 'react-chessboard/dist/chessboard/types';
 import {pieces} from './Pieces';
-import {MovementsButtons} from './MovementsButtons';
+import {MovementsButtons} from './components/MovementsButtons';
+import {CoordinatesToNumeric, NumericToCoordinates} from './utils'
 
-
-const boardSize = 200
-const files = "abcdefgh"
-const ranks = "12345678"
-
-function NumericToCoordinates(x: number, y: number){
-  if (x > 7 || x < 0 || y > 7 || y < 0) return null;
-  return files[x]+String(y+1)
-}
-
-function CoordinatesToNumeric(coord: string){
-  if (coord.length != 2 || !files.includes(coord[0]) || !ranks.includes(coord[1])) return null;
-  return [files.indexOf(coord[0]), ranks.indexOf(coord[1])]
-}
+const boardSize = 300
 
 
 function CropArrowToBoard(x: number, y: number, dir : number[]){
@@ -31,7 +19,6 @@ function CropArrowToBoard(x: number, y: number, dir : number[]){
   }
   return [x, y]
 }
-
 
 const directions = [[[-1,1],[0,1],[1,1]],[[-1,0],null,[1,0]],[[-1,-1],[0,-1],[1,-1]]]
 function drawArrows(setArrows: Function, movements: (number | null)[][], currentPosition: string) {
@@ -59,25 +46,46 @@ function drawArrows(setArrows: Function, movements: (number | null)[][], current
   }
   setArrows(arrows);
 }
-function OnPositionChange(currentPosition : Map<string, string>, setArrows: Function, 
-                          setPiecePosition: Function, movements : (number | null)[][] ){
+function OnPositionChange(currentPosition : BoardPosition, setArrows: Function, 
+                          setPiecePosition: Function, movements : (number | null)[][]){
   for (var k in currentPosition) {
-
     drawArrows(setArrows, movements, k); 
     setPiecePosition(k);
+    return;
   }
+}
 
+function onPieceDrop(sourceSquare: Square, targetSquare: Square, piece: string, setBoardPosition: Function){
+  setBoardPosition({[targetSquare] : piece});
   return true;
 }
 
 
+type Props = {movements : (number | null)[][], arrowsColor: string, arrows: Square[][], setArrows: Function, piecePosition: string, setPiecePosition: Function}
+const DisplayBoard : React.FC<Props> = ({movements, arrowsColor, arrows, setArrows, piecePosition, setPiecePosition}) => {
+  const [boardPosition, setBoardPosition] = useState<BoardPosition>({"c5": "wK"})
+  return <Chessboard
+                boardWidth={boardSize}
+                customPieces={pieces}
+                customArrows={arrows} 
+                position={boardPosition}
+                customArrowColor={arrowsColor}
+                getPositionObject={(currentPosition) => OnPositionChange(currentPosition, setArrows, setPiecePosition, movements)}   
+                onPieceDrop={(sourceSquare, targetSquare, piece) => onPieceDrop(sourceSquare, targetSquare, piece, setBoardPosition)}
+                areArrowsAllowed={false}
+                onSquareClick={() => drawArrows(setArrows, movements, piecePosition)}
+                />
+
+}
+
 function App() {
+
   const [arrowsMovements, setArrowsMovements] = useState<Square[][]>([]);
   const [arrowsCaptures, setArrowsCaptures] = useState<Square[][]>([]);
   const [movements, setMovements] = useState<(number | null)[][]>([[0,0,0],[0,null,0],[0,0,0]]);
   const [captures, setCaptures] = useState<(number | null)[][]>([[0,0,0],[0,null,0],[0,0,0]]);
-  const [piecePosition1, setPiecePosition1] = useState<string>("d5")
-  const [piecePosition2, setPiecePosition2] = useState<string>("d5")
+  const [piecePositionMovements, setPiecePositionMovements] = useState<string>("d5")
+  const [piecePositionCaptures, setPiecePositionCaptures] = useState<string>("d5")
 
   return (
     <div className="App container">
@@ -89,32 +97,36 @@ function App() {
           <h3 className="text-primary">Movements</h3>
           <MovementsButtons movements={movements} setMovements={setMovements} 
             captures={captures} setCaptures={setCaptures} 
-            refreshArrowsMovements={() => drawArrows(setArrowsMovements, movements, piecePosition1)}
-            refreshArrowsCaptures={() => drawArrows(setArrowsCaptures, captures, piecePosition2)}
+            refreshArrowsMovements={() => drawArrows(setArrowsMovements, movements, piecePositionMovements)}
+            refreshArrowsCaptures={() => drawArrows(setArrowsCaptures, captures, piecePositionCaptures)}
             />
         </div>
 
 
         <div className='col'>
-          <div className='col'>
-            <Chessboard
-              boardWidth={boardSize}
-              customPieces={pieces}
-              customArrows={arrowsMovements} 
-              position="8/8/8/3K4/8/8/8/8"
-              customArrowColor="green"
-              getPositionObject={(currentPosition) => OnPositionChange(currentPosition, setArrowsMovements, setPiecePosition1, movements)}   
-              />
-            <Chessboard
-              boardWidth={boardSize}
-              customPieces={pieces}
-              customArrows={arrowsCaptures} 
-              position="8/8/8/3K4/8/8/8/8"
-              customArrowColor="red"
-              getPositionObject={(currentPosition) => OnPositionChange(currentPosition, setArrowsCaptures, setPiecePosition2, captures)}   
-              />
+          <div className='d-flex flex-row'>
+            <div className='px-2'>
+              <DisplayBoard 
+                movements={movements} 
+                arrowsColor="green" 
+                arrows={arrowsMovements} 
+                setArrows={setArrowsMovements} 
+                piecePosition={piecePositionMovements}
+                setPiecePosition={setPiecePositionMovements}/>
+              <h5 className='text-success'>movements</h5>
+            </div>
+            <div className=''>
+              <DisplayBoard 
+                movements={captures} 
+                arrowsColor="red" 
+                arrows={arrowsCaptures} 
+                setArrows={setArrowsCaptures} 
+                piecePosition={piecePositionCaptures}
+                setPiecePosition={setPiecePositionCaptures}/>
+              <h5 className='text-danger'>captures</h5>
+            </div>
           </div>
-          <p className='text-primary'>Drag and drop the piece around to see the squares coverage</p>
+          <p className='text-primary pleft-0'>Drag and drop the piece around to see the squares coverage</p>
         </div>
       </div>
 
