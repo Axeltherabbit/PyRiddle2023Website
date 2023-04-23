@@ -77,8 +77,8 @@ const DisplayBoard : React.FC<Props> = ({movements, arrowsColor, arrows, setArro
 
 }
 
-type PropsTab = {pieceName: string, active: number, index: number, pieceSrc: string}
-export const PieceTab : React.FC<PropsTab> = ({pieceName, active, index, pieceSrc}) => {
+type PropsTab = {pieceName: string, active: number, index: number, pieceSrc: string, piecesCount: number[], setPiecesCount : Function}
+export const PieceTab : React.FC<PropsTab> = ({pieceName, active, index, pieceSrc, piecesCount, setPiecesCount}) => {
   //Passing the tab index is used to avoid an arrow rendering glitch which seems due to react-chessboard
 
   const [arrowsMovements, setArrowsMovements] = useState<Square[][]>([]);
@@ -97,7 +97,9 @@ export const PieceTab : React.FC<PropsTab> = ({pieceName, active, index, pieceSr
         <div className='col'>
           <h3 className="text-primary">Movements</h3>
           <MovementsButtons movements={movements} setMovements={setMovements} 
-            captures={captures} setCaptures={setCaptures} pieceSrc={pieceSrc}/>
+            captures={captures} setCaptures={setCaptures} pieceSrc={pieceSrc} 
+            piecesCount={piecesCount} setPiecesCount={setPiecesCount}
+            index={index}/>
         </div>
 
 

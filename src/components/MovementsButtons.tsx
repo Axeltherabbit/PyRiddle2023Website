@@ -9,27 +9,42 @@ function updateMovement(current : (number | null)[][], setState: Function, x: nu
   setState(new_state);
 }
 
-
+function updatePiecesCount(index: number, incr: number, setPiecesCount: Function, piecesCount: number[]){
+  let newPiecesCount = [...piecesCount]
+  newPiecesCount[index] += incr
+  setPiecesCount(newPiecesCount)
+}
 type Props = {movements : (number | null)[][], setMovements : Function, captures : (number | null)[][], 
-  setCaptures : Function, pieceSrc: string}
+  setCaptures : Function, pieceSrc: string, piecesCount: number[], setPiecesCount : Function, index: number}
 
-export const MovementsButtons : React.FC<Props> = ({movements, setMovements, captures, setCaptures, pieceSrc}) => {
-  const Arrows = [[ArrowUpLeft, ArrowUp, ArrowUpRight], [ArrowLeft, null, ArrowRight], [ArrowDownLeft, ArrowDown, ArrowDownRight]];
+export const MovementsButtons : React.FC<Props> = ({movements, setMovements, captures,
+  setCaptures, pieceSrc, piecesCount, setPiecesCount, index}) => {
+
+  const Arrows = [[ArrowUpLeft, ArrowUp, ArrowUpRight], 
+                  [ArrowLeft, null, ArrowRight],
+                  [ArrowDownLeft, ArrowDown, ArrowDownRight]];
+
   return (
     <div className='container'>
       {
       [...Array(3)].map((_, i) => (
-            <div key={`div${i}`} className='col d-flex justify-content-between' >
+            <div key={`div${i}`} className='col d-flex justify-content-between align-items-center' >
               {
                 [...Array(3)].map((_, j) => {
                   if (Arrows[i][j] === null) return (
-                    <div>
-                      <img src={pieceSrc}></img>
+                    <div key="MiddleDiv" >
+                      <img src={pieceSrc} />
+                      <div key="InnerMiddleDiv">
+                        <Button className='btn btn-secondary btn-sm' 
+                            onClick={()=> updatePiecesCount(index, 1, setPiecesCount, piecesCount)}>+</Button>
+                        <Button className='btn btn-secondary btn-sm'
+                            onClick={()=> updatePiecesCount(index, -1, setPiecesCount, piecesCount)}>-</Button>
+                      </div>
                     </div>
                   )
                   else return (
                     <div key={`div${i}${j}`} className='mx-1'>
-                      <h3 className='text-primary'>
+                      <h3  className='text-primary'>
                         <span className='text-success'>{movements[i][j]}</span> 
                         <span> {React.createElement(Arrows[i][j])} </span>
                         <span className='text-danger'>{captures[i][j]}</span>
@@ -37,11 +52,11 @@ export const MovementsButtons : React.FC<Props> = ({movements, setMovements, cap
                       <div key={`divInner${i}${j}`} className='col'>
                         <Button key={`bpm${i}${j}`} className='btn btn-success btn-sm' 
                             onClick={()=>updateMovement(movements, setMovements, i, j, 1)}>+</Button>
-                        <Button key={`bmc${i}${j}`} className='btn btn-danger btn-sm'
-                            onClick={()=>updateMovement(captures, setCaptures, i, j, 1)}>+</Button>
-                        <Button key={`bpm${i}${j}`} className='btn btn-success btn-sm'
-                            onClick={()=>updateMovement(movements, setMovements, i, j, -1)}>-</Button>
                         <Button key={`bpc${i}${j}`} className='btn btn-danger btn-sm'
+                            onClick={()=>updateMovement(captures, setCaptures, i, j, 1)}>+</Button>
+                        <Button key={`bmm${i}${j}`} className='btn btn-success btn-sm'
+                            onClick={()=>updateMovement(movements, setMovements, i, j, -1)}>-</Button>
+                        <Button key={`bmc${i}${j}`} className='btn btn-danger btn-sm'
                             onClick={()=>updateMovement(captures, setCaptures, i, j, -1)}>-</Button>
                       </div>
                     </div>);
