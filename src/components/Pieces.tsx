@@ -1,7 +1,7 @@
 // Icons taken from https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces
-import CommonerIcon from "./assets/90px-Commoner_Transparent.svg.png"
-import UnicornIcon from "./assets/Chess_Ult45.svg.png"
-import MannIcon from "./assets/Chess_Mlt45.svg.png"
+import CommonerIcon from "../assets/90px-Commoner_Transparent.svg.png"
+import UnicornIcon from "../assets/Chess_Ult45.svg.png"
+import MannIcon from "../assets/Chess_Mlt45.svg.png"
 
 interface customPieceArgs {
   squareWidth: number,
