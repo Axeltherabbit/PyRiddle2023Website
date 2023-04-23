@@ -4,20 +4,19 @@ import React from 'react';
 import {ArrowUpLeft, ArrowUp, ArrowUpRight, ArrowLeft, ArrowRight, ArrowDownLeft, ArrowDown, ArrowDownRight} from 'react-bootstrap-icons';
 import { Button, Form } from 'react-bootstrap';
 
-function updateMovement(current : (number | null)[][], setState: Function, x: number, y: number, toggle : boolean, refreshArrows: Function){
+function updateMovement(current : (number | null)[][], setState: Function, x: number, y: number, toggle : boolean){
   let increase = toggle ? 1 : -1 ;
   let new_state = [...current];
-  if (new_state[x][y] !== null) new_state[x][y] = Math.min(Math.max(new_state[x][y] + increase, 0),7);
+  if (new_state[x] !== null && new_state[x][y] !== null) new_state[x][y] = Math.min(Math.max(new_state[x][y] + increase, 0),7);
   setState(new_state);
-  refreshArrows();
 }
 
 
 type Props = {movements : (number | null)[][], setMovements : Function, captures : (number | null)[][], 
-  setCaptures : Function, refreshArrowsMovements: Function, refreshArrowsCaptures: Function}
+  setCaptures : Function}
 
 export const MovementsButtons : React.FC<Props> = ({movements, setMovements, captures, 
-  setCaptures, refreshArrowsMovements, refreshArrowsCaptures}) => {
+  setCaptures}) => {
   const [toggle, setToggle] = useState<boolean>(true);
     
   const Arrows = [[ArrowUpLeft, ArrowUp, ArrowUpRight], [ArrowLeft, null, ArrowRight], [ArrowDownLeft, ArrowDown, ArrowDownRight]];
@@ -39,8 +38,8 @@ export const MovementsButtons : React.FC<Props> = ({movements, setMovements, cap
                   </Form.Group>);
 
                   return (<div key={`div${i}${j}`}>
-                    <Button key={`bs${i}${j}`} className='btn btn-success' onClick={()=>updateMovement(movements, setMovements, i, j, toggle, refreshArrowsMovements)}>{React.createElement(Arrows[i][j])}{movements[i][j]}</Button> 
-                    <Button key={`bd${i}${j}`} className='btn btn-danger' onClick={()=>updateMovement(captures, setCaptures, i, j, toggle, refreshArrowsCaptures)}>{React.createElement(Arrows[i][j])}{captures[i][j]}</Button>
+                    <Button key={`bs${i}${j}`} className='btn btn-success' onClick={()=>updateMovement(movements, setMovements, i, j, toggle)}>{React.createElement(Arrows[i][j])}{movements[i][j]}</Button> 
+                    <Button key={`bd${i}${j}`} className='btn btn-danger' onClick={()=>updateMovement(captures, setCaptures, i, j, toggle)}>{React.createElement(Arrows[i][j])}{captures[i][j]}</Button>
                     </div>);
                 })
               }

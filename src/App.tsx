@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Chessboard } from "react-chessboard";
 
 import './App.css';
@@ -87,6 +87,9 @@ function App() {
   const [piecePositionMovements, setPiecePositionMovements] = useState<string>("d5")
   const [piecePositionCaptures, setPiecePositionCaptures] = useState<string>("d5")
 
+  useEffect(() => drawArrows(setArrowsMovements, movements, piecePositionMovements), [movements])
+  useEffect(() => drawArrows(setArrowsCaptures, captures, piecePositionCaptures), [captures])
+
   return (
     <div className="App container">
       <h1 className="text-primary">PyRiddle 2023</h1>
@@ -96,10 +99,7 @@ function App() {
         <div className='col'>
           <h3 className="text-primary">Movements</h3>
           <MovementsButtons movements={movements} setMovements={setMovements} 
-            captures={captures} setCaptures={setCaptures} 
-            refreshArrowsMovements={() => drawArrows(setArrowsMovements, movements, piecePositionMovements)}
-            refreshArrowsCaptures={() => drawArrows(setArrowsCaptures, captures, piecePositionCaptures)}
-            />
+            captures={captures} setCaptures={setCaptures} />
         </div>
 
 
