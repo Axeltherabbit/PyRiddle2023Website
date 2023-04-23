@@ -13,6 +13,7 @@ function App() {
  const [tabIndex, setTabIndex] = useState(0);
  return (
     <div className="App container">
+    <h1 className='text-primary'>Pycon Italia Riddle 2023</h1>
     <Tabs forceRenderTabPanel={true} selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
         <TabList>
           <Tab><img src={CommonerIcon} alt="CommonerIcon" height="32" width="32" /></Tab>
@@ -21,13 +22,13 @@ function App() {
         </TabList>
 
         <TabPanel>
-          <PieceTab pieceName='wK' active={tabIndex} index={0}/>
+          <PieceTab pieceName='wK' active={tabIndex} index={0} pieceSrc={CommonerIcon}/>
         </TabPanel>
         <TabPanel>
-          <PieceTab pieceName='wR' active={tabIndex} index={1}/>
+          <PieceTab pieceName='wR' active={tabIndex} index={1} pieceSrc={MannIcon}/>
         </TabPanel>
         <TabPanel>
-          <PieceTab pieceName='wN'active={tabIndex} index={2}/>
+          <PieceTab pieceName='wN'active={tabIndex} index={2} pieceSrc={UnicornIcon}/>
         </TabPanel>
       </Tabs>
     </div>

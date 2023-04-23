@@ -62,7 +62,7 @@ function onPieceDrop(sourceSquare: Square, targetSquare: Square, piece: string, 
 
 type Props = {movements : (number | null)[][], arrowsColor: string, arrows: Square[][], setArrows: Function, piecePosition: string, setPiecePosition: Function, pieceName : string}
 const DisplayBoard : React.FC<Props> = ({movements, arrowsColor, arrows, setArrows, piecePosition, setPiecePosition, pieceName}) => {
-  const [boardPosition, setBoardPosition] = useState<BoardPosition>({"c5": pieceName})
+  const [boardPosition, setBoardPosition] = useState<BoardPosition>({"d5": pieceName})
   return <Chessboard
                 boardWidth={boardSize}
                 customPieces={pieces}
@@ -77,7 +77,8 @@ const DisplayBoard : React.FC<Props> = ({movements, arrowsColor, arrows, setArro
 
 }
 
-export const PieceTab : React.FC<{pieceName: string, active: number, index: number}> = ({pieceName, active, index}) => {
+type PropsTab = {pieceName: string, active: number, index: number, pieceSrc: string}
+export const PieceTab : React.FC<PropsTab> = ({pieceName, active, index, pieceSrc}) => {
   //Passing the tab index is used to avoid an arrow rendering glitch which seems due to react-chessboard
 
   const [arrowsMovements, setArrowsMovements] = useState<Square[][]>([]);
@@ -96,7 +97,7 @@ export const PieceTab : React.FC<{pieceName: string, active: number, index: numb
         <div className='col'>
           <h3 className="text-primary">Movements</h3>
           <MovementsButtons movements={movements} setMovements={setMovements} 
-            captures={captures} setCaptures={setCaptures} />
+            captures={captures} setCaptures={setCaptures} pieceSrc={pieceSrc}/>
         </div>
 
 
