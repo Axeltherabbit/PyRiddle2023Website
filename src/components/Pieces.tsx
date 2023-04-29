@@ -20,7 +20,7 @@ function customPiece(icon: string, tag: string) {
     />)
 }
 export var pieces = {
-  wK: customPiece(CommonerIcon, "Commoner"),
+  wQ: customPiece(CommonerIcon, "Commoner"),
   wR: customPiece(MannIcon, "Mann"),
   wN: customPiece(UnicornIcon, "Unicorn"),
 }
