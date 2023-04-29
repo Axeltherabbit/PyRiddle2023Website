@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import {ArrowUpLeft, ArrowUp, ArrowUpRight, ArrowLeft, ArrowRight, ArrowDownLeft, ArrowDown, ArrowDownRight, Icon} from 'react-bootstrap-icons';
 import { Button} from 'react-bootstrap';
+import {reduceSum} from '../utils';
 
 function updateMovement(current : (number | null)[][], setState: Function, x: number, y: number, increase: number){
   let new_state = [...current];
@@ -13,7 +14,7 @@ function updateMovement(current : (number | null)[][], setState: Function, x: nu
 function updatePiecesCount(index: number, incr: number, setPiecesCount: Function, piecesCount: number[]){
   let newPiecesCount = [...piecesCount];
   newPiecesCount[index] = Math.max(piecesCount[index]+ incr, 0);
-  setPiecesCount(newPiecesCount);
+  if (newPiecesCount.reduce(reduceSum) < 24) setPiecesCount(newPiecesCount);
 }
 
 function getIcon(icon : Icon | null){
