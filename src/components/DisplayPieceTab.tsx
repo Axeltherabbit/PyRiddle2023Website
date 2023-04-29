@@ -4,7 +4,7 @@ import { Chessboard } from "react-chessboard";
 import { BoardPosition, Square } from 'react-chessboard/dist/chessboard/types';
 import {pieces} from './Pieces';
 import {MovementsButtons} from './MovementsButtons';
-import {CoordinatesToNumeric, NumericToCoordinates} from '../utils'
+import {CoordinatesToNumeric, NumericToCoordinates, ReduceToPointsCaptures, ReduceToPointsMovements} from '../utils'
 
 const boardSize = 300
 
@@ -58,7 +58,14 @@ function onPieceDrop(sourceSquare: Square, targetSquare: Square, piece: string, 
   setBoardPosition({[targetSquare] : piece});
   return true;
 }
-
+function updatePoints(points: number[], setPoints: Function, 
+                      index: number, captures: (null | number)[][], movements: (null | number)[][],
+                      piecesCount: number[]){
+  let newPoints : number[] = [...points];
+  // @ts-ignore
+  newPoints[index] = (movements.reduce(ReduceToPointsMovements, 0) + captures.reduce(ReduceToPointsCaptures, 0)) * piecesCount[index];
+  setPoints(newPoints);
+}
 
 type Props = {movements : (number | null)[][], arrowsColor: string, arrows: Square[][], setArrows: Function, piecePosition: string, setPiecePosition: Function, pieceName : string}
 const DisplayBoard : React.FC<Props> = ({movements, arrowsColor, arrows, setArrows, piecePosition, setPiecePosition, pieceName}) => {
@@ -77,8 +84,9 @@ const DisplayBoard : React.FC<Props> = ({movements, arrowsColor, arrows, setArro
 
 }
 
-type PropsTab = {pieceName: string, active: number, index: number, pieceSrc: string, piecesCount: number[], setPiecesCount : Function}
-export const PieceTab : React.FC<PropsTab> = ({pieceName, active, index, pieceSrc, piecesCount, setPiecesCount}) => {
+type PropsTab = {pieceName: string, active: number, index: number, pieceSrc: string, 
+  piecesCount: number[], setPiecesCount : Function, points: number[], setPoints: Function}
+export const PieceTab : React.FC<PropsTab> = ({pieceName, active, index, pieceSrc, piecesCount, setPiecesCount, points, setPoints}) => {
   //Passing the tab index is used to avoid an arrow rendering glitch which seems due to react-chessboard
 
   const [arrowsMovements, setArrowsMovements] = useState<Square[][]>([]);
@@ -90,6 +98,7 @@ export const PieceTab : React.FC<PropsTab> = ({pieceName, active, index, pieceSr
 
   useEffect(() => drawArrows(setArrowsMovements, movements, piecePositionMovements), [movements])
   useEffect(() => drawArrows(setArrowsCaptures, captures, piecePositionCaptures), [captures])
+  useEffect(() => updatePoints(points, setPoints, index , captures, movements, piecesCount), [piecesCount[index], movements, captures]);
 
   return (
     <div className="container">

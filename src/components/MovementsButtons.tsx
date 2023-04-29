@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {ArrowUpLeft, ArrowUp, ArrowUpRight, ArrowLeft, ArrowRight, ArrowDownLeft, ArrowDown, ArrowDownRight, Icon} from 'react-bootstrap-icons';
 import { Button} from 'react-bootstrap';
@@ -11,9 +11,9 @@ function updateMovement(current : (number | null)[][], setState: Function, x: nu
 }
 
 function updatePiecesCount(index: number, incr: number, setPiecesCount: Function, piecesCount: number[]){
-  let newPiecesCount = [...piecesCount]
-  newPiecesCount[index] += incr
-  setPiecesCount(newPiecesCount)
+  let newPiecesCount = [...piecesCount];
+  newPiecesCount[index] = Math.max(piecesCount[index]+ incr, 0);
+  setPiecesCount(newPiecesCount);
 }
 
 function getIcon(icon : Icon | null){
@@ -31,17 +31,18 @@ export const MovementsButtons : React.FC<Props> = ({movements, setMovements, cap
                   [ArrowLeft, null, ArrowRight],
                   [ArrowDownLeft, ArrowDown, ArrowDownRight]];
 
+
   return (
-    <div className='container'>
+    <div className={`container tab-${index}`}>
       {
       [...Array(3)].map((_, i) => (
-            <div key={`div${i}`} className='col d-flex justify-content-between align-items-center' >
+            <div key={`div${i}-{index}`} className='col d-flex justify-content-between align-items-center' >
               {
                 [...Array(3)].map((_, j) => {
                   if (Arrows[i][j] === null) return (
-                    <div key="MiddleDiv" >
+                    <div key={`MiddleDiv-${index}`} >
                       <img src={pieceSrc} />
-                      <div key="InnerMiddleDiv">
+                      <div key={`InnerMiddleDiv-${index}`}>
                         <Button className='btn btn-secondary btn-sm' 
                             onClick={()=> updatePiecesCount(index, 1, setPiecesCount, piecesCount)}>+</Button>
                         <Button className='btn btn-secondary btn-sm'
