@@ -20,7 +20,7 @@ export const PieceTypeTemplate = `
     )
 `
 
-const PieceInstanceTemplate = '\t\t%PIECENAME%(pawn, %X%, %Y%),'
+const PieceInstanceTemplate = '\t\tPiece(%PIECENAME%, %X%, %Y%),'
 const codeTemplate = `
 def setup():
 
