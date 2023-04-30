@@ -112,7 +112,7 @@ export const PieceTab : React.FC<PropsTab> = ({pieceName, active, index, pieceSr
   useEffect(() => drawArrows(setArrowsMovements, movements, piecePositionMovements), [movements])
   useEffect(() => drawArrows(setArrowsCaptures, captures, piecePositionCaptures), [captures])
   useEffect(() => updatePoints(points, setPoints, index , captures, movements, piecesCount), [piecesCount[index], movements, captures]);
-  useEffect(() => updateCode(movements, captures, setPieceTypeCode, pieceTypeCode, index), [movements, captures])
+  useEffect(() => updateCode(movements, captures, setPieceTypeCode, pieceTypeCode, index), [movements, captures, piecesCount])
 
   return (
     <div className="container">
