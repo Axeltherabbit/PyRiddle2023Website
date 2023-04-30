@@ -64,7 +64,7 @@ function updatePoints(points: number[], setPoints: Function,
                       piecesCount: number[]){
   let newPoints : number[] = [...points];
   // @ts-ignore
-  newPoints[index] = (movements.reduce(ReduceToPointsMovements, 0) + captures.reduce(ReduceToPointsCaptures, 0)) * piecesCount[index];
+  newPoints[index] = (movements.reduce(ReduceToPointsMovements, 0) + captures.reduce(ReduceToPointsCaptures, 0) + 10) * piecesCount[index];
   setPoints(newPoints);
 }
 
