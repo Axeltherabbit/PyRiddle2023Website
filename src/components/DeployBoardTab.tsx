@@ -10,9 +10,9 @@ import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const boardSize = 300;
 
-
-const PieceNameMap = {wQ: "commoner", wR: "mann", wN: "unicorn", wK: "king"}
-export const PieceTypeNames = ["commoner", "mann", "unicorn"]
+type PieceNameMapType = {[piece: string] : string}
+const PieceNameMap: PieceNameMapType = {wQ: "commoner", wR: "mann", wN: "unicorn", wK: "king"}
+export const PieceTypeNames : string[] = ["commoner", "mann", "unicorn"]
 export const PieceTypeTemplate = `
   %PIECENAME% = PieceType(
         attack = Range(%ATTACK%),
@@ -44,12 +44,14 @@ function nextCoordinate(x: number, y: number) : number[]{
 
 function setUpInitialPosition(setBoardPosition: Function, piecesCount: number[]){
   let currentCoordinate : number[] = [0, 0]
-  let position : BoardPosition = { [NumericToCoordinates(currentCoordinate[0], currentCoordinate[1])] : "wK"}
+  let position : BoardPosition = { a1 : "wK"}
   const PieceMap = ["wQ", "wR", "wN"];
   for (let i=0; i < 3; i++){
     for (let j=0; j < piecesCount[i]; j++) {
       currentCoordinate = nextCoordinate(currentCoordinate[0], currentCoordinate[1])
-      position = { ...position, [NumericToCoordinates(currentCoordinate[0], currentCoordinate[1])] : PieceMap[i]}
+      let coord: string | null = NumericToCoordinates(currentCoordinate[0], currentCoordinate[1]);
+      if (coord === null) continue;
+      position = { ...position, [coord] : PieceMap[i]}
     }
   }
 
@@ -79,12 +81,12 @@ function updateCode(setCode: Function, pieceTypeCode: string[], boardPosition: B
 
   let instances: string[] = []
   for (let coord in boardPosition){
-    let piece: string = boardPosition[coord];
+    let piece: string = boardPosition[coord as Square];
     let numCoord: number[] | null = CoordinatesToNumeric(coord);
     if (numCoord === null) continue;
     let instance: string = PieceInstanceTemplate.replace("%PIECENAME%", PieceNameMap[piece])
-                                                .replace("%X%", numCoord[0])
-                                                .replace("%Y%", numCoord[1])
+                                                .replace("%X%", numCoord[0].toString())
+                                                .replace("%Y%", numCoord[1].toString())
     instances.push(instance)
   }
 
@@ -95,7 +97,7 @@ function updateCode(setCode: Function, pieceTypeCode: string[], boardPosition: B
 type Props = {piecesCount: number[], pieceTypeCode: string[]}
 export const DeployBoardTab : React.FC<Props> = ({piecesCount, pieceTypeCode}) => {
 
-  const [boardPosition, setBoardPosition] = useState<BoardPosition>("8/8/8/8/8/8/8/8");
+  const [boardPosition, setBoardPosition] = useState<BoardPosition>({});
   const [code, setCode] = useState<string>("");
 
   useEffect(() => setUpInitialPosition(setBoardPosition, piecesCount), [piecesCount])

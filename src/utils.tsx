@@ -1,7 +1,7 @@
 export const files = "abcdefgh"
 export const ranks = "12345678"
 
-export function NumericToCoordinates(x: number, y: number) : string {
+export function NumericToCoordinates(x: number, y: number) : string | null {
   if (x > 7 || x < 0 || y > 7 || y < 0) return null;
   return files[x]+String(y+1)
 }
