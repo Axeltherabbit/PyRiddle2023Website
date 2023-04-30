@@ -7,7 +7,7 @@ import {reduceSum} from '../utils';
 function updateMovement(current : (number | null)[][], setState: Function, x: number, y: number, increase: number){
   let new_state = [...current];
   // @ts-ignore
-  if (new_state[x] !== null && new_state[x][y] !== null) new_state[x][y] = Math.min(Math.max(new_state[x][y] + increase, 0),7);
+  if (new_state[x] !== null && new_state[x][y] !== null) new_state[x][y] = Math.min(Math.max(new_state[x][y] + increase, 0),3);
   setState(new_state);
 }
 
