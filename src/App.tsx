@@ -24,6 +24,7 @@ function App() {
  const [tabIndex, setTabIndex] = useState<number>(0);
  const [piecesCount, setPiecesCount] = useState<number[]>([0,0,0]);
  const [points, setPoints] = useState<number[]>([0, 0, 0]);
+ const [pieceTypeCode, setPieceTypeCode] = useState<string[]>(["","",""])
  return (
     <div className="App container">
     <h1 className='text-primary'>Pycon Italia Riddle 2023</h1>
@@ -46,17 +47,24 @@ function App() {
         </TabList>
 
         <TabPanel>
-          <PieceTab pieceName='wQ' active={tabIndex} index={0} pieceSrc={CommonerIcon} piecesCount={piecesCount} setPiecesCount={setPiecesCount} points={points} setPoints={setPoints}/>
+          <PieceTab pieceName='wQ' active={tabIndex} index={0} pieceSrc={CommonerIcon}
+                    piecesCount={piecesCount} setPiecesCount={setPiecesCount} points={points} 
+                    setPoints={setPoints} setPieceTypeCode={setPieceTypeCode} pieceTypeCode={pieceTypeCode}/>
         </TabPanel>
         <TabPanel>
-          <PieceTab pieceName='wR' active={tabIndex} index={1} pieceSrc={MannIcon} piecesCount={piecesCount} setPiecesCount={setPiecesCount} points={points} setPoints={setPoints}/>
+          <PieceTab pieceName='wR' active={tabIndex} index={1} pieceSrc={MannIcon} 
+                    piecesCount={piecesCount} setPiecesCount={setPiecesCount} points={points} 
+                    setPoints={setPoints} setPieceTypeCode={setPieceTypeCode} pieceTypeCode={pieceTypeCode}/>
         </TabPanel>
         <TabPanel>
-          <PieceTab pieceName='wN'active={tabIndex} index={2} pieceSrc={UnicornIcon} piecesCount={piecesCount} setPiecesCount={setPiecesCount} points={points} setPoints={setPoints}/>
+          <PieceTab pieceName='wN'active={tabIndex} index={2} pieceSrc={UnicornIcon} 
+                    piecesCount={piecesCount} setPiecesCount={setPiecesCount} points={points} 
+                    setPoints={setPoints} setPieceTypeCode={setPieceTypeCode} pieceTypeCode={pieceTypeCode}/> 
+
         </TabPanel>
 
         <TabPanel>
-          <DeployBoardTab piecesCount={piecesCount}/>
+          <DeployBoardTab piecesCount={piecesCount} pieceTypeCode={pieceTypeCode}/>
         </TabPanel>
 
       </Tabs>

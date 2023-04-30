@@ -11,20 +11,23 @@ import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 const boardSize = 300;
 
 
-const PieceTypeTemplace = `
+const PieceNameMap = {wQ: "commoner", wR: "mann", wN: "unicorn", wK: "king"}
+export const PieceTypeNames = ["commoner", "mann", "unicorn"]
+export const PieceTypeTemplate = `
   %PIECENAME% = PieceType(
         attack = Range(%ATTACK%),
-        movement = Range(%MOMEMENT%)
+        movement = Range(%MOVEMENT%)
     )
 `
 
-const PieceInstanceTemplate = `%PIECENAME%(pawn, %X%, %Y%),`
+const PieceInstanceTemplate = '\t\t%PIECENAME%(pawn, %X%, %Y%),'
 const codeTemplate = `
 def setup():
 
   %TYPES%
 
-  return [%INSTANCES%]`;
+  return [
+%INSTANCES%]`;
 
 
 
@@ -69,15 +72,41 @@ function onPieceDrop(sourceSquare: Square, targetSquare : Square, piece : string
   }
 
 }
-type Props = {piecesCount: number[]}
-export const DeployBoardTab : React.FC<Props> = ({piecesCount}) => {
-  const [boardPosition, setBoardPosition] = useState("8/8/8/8/8/8/8/8");
-  useEffect(()=> setUpInitialPosition(setBoardPosition, piecesCount), [piecesCount])
+
+
+function updateCode(setCode: Function, pieceTypeCode: string[], boardPosition: BoardPosition){
+  let newCode : string = codeTemplate.replace("%TYPES%", pieceTypeCode.join("\n"))
+
+  let instances: string[] = []
+  for (let coord in boardPosition){
+    let piece: string = boardPosition[coord];
+    let numCoord: number[] | null = CoordinatesToNumeric(coord);
+    if (numCoord === null) continue;
+    let instance: string = PieceInstanceTemplate.replace("%PIECENAME%", PieceNameMap[piece])
+                                                .replace("%X%", numCoord[0])
+                                                .replace("%Y%", numCoord[1])
+    instances.push(instance)
+  }
+
+  newCode = newCode.replace("%INSTANCES%", instances.join("\n"))
+  setCode(newCode);
+}
+
+type Props = {piecesCount: number[], pieceTypeCode: string[]}
+export const DeployBoardTab : React.FC<Props> = ({piecesCount, pieceTypeCode}) => {
+
+  const [boardPosition, setBoardPosition] = useState<BoardPosition>("8/8/8/8/8/8/8/8");
+  const [code, setCode] = useState<string>("");
+
+  useEffect(() => setUpInitialPosition(setBoardPosition, piecesCount), [piecesCount])
+  useEffect(() => updateCode(setCode, pieceTypeCode, boardPosition), [pieceTypeCode, boardPosition])
+
+
   return <div className="d-flex">
     <div>
       <p className="text-primary mx-0">Drag and Drop your pieces on the first 3 ranks to setup your starting position</p>
       <SyntaxHighlighter language="python" style={dark}>
-        {codeTemplate} 
+        {code} 
       </SyntaxHighlighter>
     </div>
    <Chessboard
