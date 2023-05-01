@@ -115,10 +115,9 @@ export const PieceTab : React.FC<PropsTab> = ({pieceName, active, index, pieceSr
   useEffect(() => updateCode(movements, captures, setPieceTypeCode, pieceTypeCode, index), [movements, captures, piecesCount[index]])
 
   return (
-    <div className="container">
-      <div className='row'>
-        <div className='col'>
-          <h3 className="text-primary">Movements</h3>
+    <div className="d-md-flex flex-md-column d-sm-flex flex-sm-row">
+        <div className='mb-2'>
+          <h3 className="text-primary ">Movements</h3>
           <MovementsButtons movements={movements} setMovements={setMovements} 
             captures={captures} setCaptures={setCaptures} pieceSrc={pieceSrc} 
             piecesCount={piecesCount} setPiecesCount={setPiecesCount}
@@ -126,9 +125,9 @@ export const PieceTab : React.FC<PropsTab> = ({pieceName, active, index, pieceSr
         </div>
 
 
-        <div className='col'>
-          <div className='d-flex flex-row'>
-            <div className='px-2'>
+        <div>
+          <div className='d-md-flex flex-md-row d-sm-flex flex-sm-column'>
+            <div>
               { (active === index) ? <DisplayBoard 
                 movements={movements} 
                 arrowsColor="green" 
@@ -140,7 +139,7 @@ export const PieceTab : React.FC<PropsTab> = ({pieceName, active, index, pieceSr
               }
               <h5 className='text-success'>movements</h5>
             </div>
-            <div className=''>
+            <div>
               { (active === index) ? <DisplayBoard 
                 movements={captures} 
                 arrowsColor="red" 
@@ -154,8 +153,6 @@ export const PieceTab : React.FC<PropsTab> = ({pieceName, active, index, pieceSr
           </div>
           <p className='text-primary pleft-0'>Drag and drop the piece around to see the squares coverage</p>
         </div>
-      </div>
-
     </div>
   )
 }

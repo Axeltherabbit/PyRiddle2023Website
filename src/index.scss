@@ -1,3 +1,10 @@
+$primary: #d93eba;
+$body-bg: #fff;
+$secondary: #8300d9;
+@import "../node_modules/bootstrap-scss/bootstrap.scss";
+
+
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -24,10 +31,12 @@ a:hover {
 
 body {
   margin: 0;
+  padding: 0;
   display: flex;
   place-items: center;
-  min-width: 320px;
+  min-width: 400px;
   min-height: 100vh;
+  --tw-bg-opacity: 1;
   background-color: #242424;
 }
 

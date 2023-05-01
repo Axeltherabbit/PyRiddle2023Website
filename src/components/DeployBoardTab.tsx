@@ -1,14 +1,16 @@
+import './DeployBoardTab.scss';
+
 import React, { useEffect, useState } from "react";
 import {pieces} from "./Pieces";
 import {CoordinatesToNumeric} from "../utils";
 import {Chessboard} from "react-chessboard";
 import { BoardPosition, Square } from "react-chessboard/dist/chessboard/types";
 import { NumericToCoordinates } from "../utils";
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { Prism as Code } from 'react-syntax-highlighter';
 import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 
-const boardSize = 300;
+const boardSize = 375;
 
 type PieceNameMapType = {[piece: string] : string}
 const PieceNameMap: PieceNameMapType = {wQ: "commoner", wR: "mann", wN: "unicorn", wK: "king"}
@@ -104,19 +106,26 @@ export const DeployBoardTab : React.FC<Props> = ({piecesCount, pieceTypeCode}) =
   useEffect(() => updateCode(setCode, pieceTypeCode, boardPosition), [pieceTypeCode, boardPosition])
 
 
-  return <div className="d-flex">
-    <div>
-      <p className="text-primary mx-0">Drag and Drop your pieces on the first 3 ranks to setup your starting position</p>
-      <SyntaxHighlighter language="python" style={dark}>
-        {code} 
-      </SyntaxHighlighter>
-    </div>
-   <Chessboard
-      boardWidth={boardSize}
-      customPieces={pieces}
-      position={boardPosition}
-      areArrowsAllowed={false}
-      onPieceDrop={(sourceSquare, targetSquare, piece) => onPieceDrop(sourceSquare, targetSquare, piece, setBoardPosition, boardPosition)}
-      />
-  </div>;
+  return (
+    <div className="d-md-flex flex-md-row d-sm-flex flex-sm-column">
+      <div className="mx-2 mb-2">
+        <Chessboard
+          boardWidth={boardSize}
+          customPieces={pieces}
+          position={boardPosition}
+          areArrowsAllowed={false}
+          onPieceDrop={(sourceSquare, targetSquare, piece) => onPieceDrop(sourceSquare, targetSquare, piece, setBoardPosition, boardPosition)}
+          />
+        <p className="text-primary px-2">Drag and Drop your pieces<br/>on the first 3 ranks to setup your starting position</p>
+     </div>
+
+      <Code language="python" 
+            style={dark}
+            // @ts-ignore
+            customStyle={{width : '400px', 'font-size': '10px'}}
+            lineProps={{className: 'code-line'}}
+      >
+       {code}
+      </Code>
+    </div>);
 }

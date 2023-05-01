@@ -58,15 +58,19 @@ export const MovementsButtons : React.FC<Props> = ({movements, setMovements, cap
                         <span> {getIcon(Arrows[i][j])} </span>                         
                         <span className='text-danger'>{captures[i][j]}</span>
                       </h3>
-                      <div key={`divInner${i}${j}`} className='col'>
+                      <div key={`divInner${i}${j}`} className='d-flex flex-row'>
+                        <div>
                         <Button key={`bpm${i}${j}`} className='btn btn-success btn-sm' 
                             onClick={()=>updateMovement(movements, setMovements, i, j, 1)}>+</Button>
                         <Button key={`bpc${i}${j}`} className='btn btn-danger btn-sm'
                             onClick={()=>updateMovement(captures, setCaptures, i, j, 1)}>+</Button>
+                        </div>
+                        <div>
                         <Button key={`bmm${i}${j}`} className='btn btn-success btn-sm'
                             onClick={()=>updateMovement(movements, setMovements, i, j, -1)}>-</Button>
                         <Button key={`bmc${i}${j}`} className='btn btn-danger btn-sm'
                             onClick={()=>updateMovement(captures, setCaptures, i, j, -1)}>-</Button>
+                        </div>
                       </div>
                     </div>);
                 })
