@@ -121,8 +121,7 @@ export const DeployBoardTab : React.FC<Props> = ({piecesCount, pieceTypeCode}) =
 
       <Code language="python" 
             style={dark}
-            // @ts-ignore
-            customStyle={{width : '400px', 'font-size': '10px'}}
+            customStyle={{width : '400px', 'fontSize': '10px'}}
             lineProps={{className: 'code-line'}}
       >
        {code}

@@ -5,6 +5,7 @@ import { Tabs, Tab, TabList, TabPanel} from 'react-tabs';
 import CommonerIcon from "./assets/90px-Commoner_Transparent.svg.png"
 import UnicornIcon from "./assets/Chess_Ult45.svg.png"
 import MannIcon from "./assets/Chess_Mlt45.svg.png"
+import PyconIcon from "./assets/pycon.it.ico";
 import 'react-tabs/style/react-tabs.css';
 import {reduceSum} from "./utils"
 import { DeployBoardTab } from './components/DeployBoardTab';
@@ -27,6 +28,7 @@ function App() {
  const [pieceTypeCode, setPieceTypeCode] = useState<string[]>(["","",""])
  return (
     <div className="App container mx-0 px-0">
+      <img src={PyconIcon}/>
       <h1 className='text-primary'>Pycon Italia Riddle 2023</h1>
       <div className='d-flex justify-content-center'>
         <h3 className={(points.reduce(reduceSum, 0) > 200) ? 'text-danger' : 'text-success'}>
